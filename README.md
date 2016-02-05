@@ -1,2 +1,4 @@
 # vc_extender
-extendere for visual composer wordpress plugin
+extender for visual composer wordpress plugin
+
+version: 0
