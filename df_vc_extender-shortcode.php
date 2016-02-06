@@ -28,6 +28,10 @@ class vc_extender_shortcode {
 	}
 
 	public function render_df_block_img( $atts, $content = null ) {
+		if(!function_exists('vc_map_get_attributes')){
+			return;
+		}
+		
 		$atts = vc_map_get_attributes( 'df_block_img', $atts );
 		extract( $atts );
 			$img_id = preg_replace('/[^\d]/', '', $image);
