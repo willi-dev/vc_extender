@@ -2,7 +2,7 @@
 /**
  * Dahz Framework
  * df_vc_extender.php
- * Class: vc_extender
+ * Class: df_vc_extender
  * Description: extender for visual composer wordpress plugin
  */
 
@@ -69,7 +69,7 @@ class df_vc_extender {
 								"heading" => "Custom Title", 
 								"param_name" => "title",
 								"admin_label" => true,
-								"description" => "- Optional, a title for this block -",
+								"description" => "Optional, a title for this block",
 								"group" => VC_EXTENDER_GROUP_GENERAL
 							),
 							array(
@@ -77,7 +77,7 @@ class df_vc_extender {
 								"heading" => "Title Url",
 								"param_name" => "title_url",
 								"admin_label" => true,
-								"description" => "- Optional, a custom url when block title is clicked -",
+								"description" => "Optional, a custom url when block title is clicked",
 								"group" => VC_EXTENDER_GROUP_GENERAL
 							),
 							array(
@@ -85,7 +85,7 @@ class df_vc_extender {
 								"heading" => "Title Text Color",
 								"param_name" => "title_text_color",
 								"admin_label" => true,
-								"description" => "- Optional, choose custom text color for block title -",
+								"description" => "Optional, choose custom text color for block title",
 								"group" => VC_EXTENDER_GROUP_GENERAL
 							),
 							array(
@@ -93,7 +93,7 @@ class df_vc_extender {
 								"heading" => "Title Background Color",
 								"param_name" => "title_bg_color",
 								"admin_label" => true,
-								"description" => "- Optional, choose custom background color for block title -",
+								"description" => "Optional, choose custom background color for block title",
 								"group" => VC_EXTENDER_GROUP_GENERAL
 							),
 							array(
@@ -102,7 +102,16 @@ class df_vc_extender {
 								"param_name" => "limit_post_number",
 								"admin_label" => true,
 								"value" => 5, // default value
-								"description" => "- If empty, number of posts will be the number from Wordpress Settings -> Reading -",
+								"description" => "If empty, number of posts will be the number from Wordpress Settings -> Reading",
+								"group" => VC_EXTENDER_GROUP_GENERAL
+							),
+							array(
+								"type" => "textfield",
+								"heading" => "Offset",
+								"param_name" => "offset",
+								"admin_label" => true,
+								"value" => '', // default value
+								"description" => "You can offset your post with the number of posts entered in this setting",
 								"group" => VC_EXTENDER_GROUP_GENERAL
 							),
 							array(
@@ -121,15 +130,17 @@ class df_vc_extender {
 								"description" => "Select the source of the posts",
 								"group" => VC_EXTENDER_GROUP_FILTER
 							),
+							// checkboxes categories filter
 							array(
 								"type" => "checkbox",
 								"heading" => "Posts Categories",
-								"param_name" => "post_categories",
-								"value" => "temp categories",
+								"param_name" => "categories",
+								"value" => $this->df_render_categories(),
 								"description" => "Which categories would you like to show?",
 								"dependency" => array("element" => "source", "value" => array('by-category')),
 								"group" => VC_EXTENDER_GROUP_FILTER
 							),
+							// textfield Post IDs filter
 							array(
 								"type" => "textfield",
 								"heading" => "Post IDs",
@@ -138,6 +149,7 @@ class df_vc_extender {
 								"dependency" => array("element" => "source", "value" => array('by-post-id')),
 								"group" => VC_EXTENDER_GROUP_FILTER
 							),
+							// textfield Tag slug filter
 							array(
 								"type" => "textfield",
 								"heading" => "Tag Slugs",
@@ -146,6 +158,7 @@ class df_vc_extender {
 								"dependency" => array("element" => "source", "value" => array('by-tag')),
 								"group" => VC_EXTENDER_GROUP_FILTER
 							),
+							// textfield Author IDs filter
 							array(
 								"type" => "textfield",
 								"heading" => "Author IDs",
@@ -155,7 +168,6 @@ class df_vc_extender {
 								"group" => VC_EXTENDER_GROUP_FILTER
 							)
 					);
-			
 		}
 		return $this->params_block;
 	}
@@ -182,21 +194,34 @@ class df_vc_extender {
 	 */
 	function df_vc_map_block($name_block, $desc_block, $base_block, $params){
 		vc_map(
-				array(
-					"name" => __($name_block, "df_vc_extender"),
-					"description" => __($desc_block, "df_vc_extender"),
-					"category" => VC_EXTENDER_CATEGORY,
-					"base" => $base_block,
-					"content_element" => true,
-					"params" => $params
-					
-				)
+			array(
+				"name" => __($name_block, "df_vc_extender"),
+				"description" => __($desc_block, "df_vc_extender"),
+				"category" => VC_EXTENDER_CATEGORY,
+				"base" => $base_block,
+				"content_element" => true,
+				"params" => $params
+			)
 		);
+	}
+
+	/**
+	 * df_render_categories()
+	 * @return list checkboxes of categories
+	 */
+	function df_render_categories(){
+		$blog_categories = get_categories();
+		$out = array();
+		foreach($blog_categories as $category) {
+			$out[$category->name] = $category->cat_ID;
+		}
+		return $out;
 	}
 
 }
 
-// shortcode vc_extender
+// shortcode df_vc_extender
 require_once('df_vc_extender-shortcode.php');
-new vc_extender_shortcode();
-/* location: [theme directory]/core/vc_extender/df_vc_extender.php */
+new df_vc_extender_shortcode();
+
+/* file location: [theme directory]/core/vc_extender/df_vc_extender.php */
