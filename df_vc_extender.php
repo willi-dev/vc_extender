@@ -7,133 +7,195 @@
  */
 
 define("VC_EXTENDER_CATEGORY", "by Dahz Themes");
+define("VC_EXTENDER_GROUP_GENERAL", "General");
+define("VC_EXTENDER_GROUP_FILTER", "Filter");
 
+class df_vc_extender {
 
-class vc_extender {
-
-	// $array_of_type = array();
-	var $array_of_function = array();
+	private $params_map = array();
+	private $params_block = array();
 
 	/**
 	 * __construct()
 	 */
 	function __construct() {
-		add_action( 'init', array( $this, 'df_block' ) );
-		add_action( 'init', array( $this, 'df_add_image') );
-		add_action( 'init', array( $this, 'df_posts_grid') );
+		$this->df_set_params_map();
+		add_action( 'init', array( $this, 'df_mapping_block') );
 	}
 
-	function df_block(){
-		vc_map( 
-			array(
-			    "name" => __("Block Grid 1", "vc_extender"), // add a name
-            	"description" => __("Bar tag description text", 'vc_extender'),
-            	"category" => VC_EXTENDER_CATEGORY,
-			    "base" => "df_block_1", // bind with our shortcode
-			    "content_element" => true, // set this parameter when element will has a content
-			    "is_container" => true, // set this param when you need to add a content element in this element
-			    // Here starts the definition of array with parameters of our compnent
-			   	
-			    "params" => array(
-			        array(
-			            "type" => "textfield", // it will bind a textfield in WP
-			            "holder" => "div",
-						"class" => "",
-						"heading" => __("Text", 'vc_extender'),
-						"param_name" => "foo",
-						"value" => __("Default params value", 'vc_extender'),
-						"description" => __("Description for foo param.", 'vc_extender')
-			        ),
-			        array(
-						"type" => "colorpicker",
-						"holder" => "div",
-						"class" => "",
-						"heading" => __("Text color", 'vc_extender'),
-						"param_name" => "color",
-						"value" => '#FF0000', //Default Red color
-						"description" => __("Choose text color", 'vc_extender')
-		            ),
-		            array(
-						"type" => "textarea_html",
-						"holder" => "div",
-						"class" => "",
-						"heading" => __("Content", 'vc_extender'),
-						"param_name" => "content",
-						"value" => __("<p>I am test text block. Click edit button to change this text.</p>", 'vc_extend'),
-						"description" => __("Enter your content.", 'vc_extender')
-					)
-			    ),
-			   
-			) 
-		);
+	/**
+	 * df_set_params_map()
+	 * function for set params of vc_map() function 
+	 */
+	function df_set_params_map(){
+		$this->params_map = array(
+				"df block 1" => array(
+									"name" => "posts block 1",
+									"description" => "description for posts block 1",
+									"base" => "df_posts_block_1",
+									"params" => $this->df_set_params_block("post_block")
+								),
+				"df_block 2" => array(
+									"name" => "posts block 2",
+									"description" => "description for posts block 2",
+									"base" => "df_posts_block_2",
+									"params" => $this->df_set_params_block("post_block")
+								),
+				"df block 3" => array(
+									"name" => "posts block 3",
+									"description" => "description for posts block 3",
+									"base" => "df_posts_block_3",
+									"params" => $this->df_set_params_block("post_block")
+								),
+				"df block 4" => array(
+									"name" => "posts block 4",
+									"description" => "description for posts block 4",
+									"base" => "df_posts_block_4",
+									"params" => $this->df_set_params_block("post_block")
+								)
+				); // end of array
 	}
 
-	function df_add_image() {
-		vc_map(
-			array(
-				"name" => __("Block Add Image", "vc_extender"),
-				"description" => __("Bar tag description text", 'vc_extender'),
-            	"category" => VC_EXTENDER_CATEGORY,
-			    "base" => "df_block_img", 
-			    "content_element" => true, 
-			    "is_container" => true, 
-			    "params" => array(
-			    		array(
-			    			"type" => "attach_image",
-			    			"holder" => "div",
-			    			"class" => "",
-			    			"heading" => __("Text", "vc_extender"),
-			    			"description" => __("description for attach image"), 
-			    			"param_name" => "image"
-			    		)
-			    	)
-			)
-		);
-	}
-
-	function df_posts_grid() {
-		vc_map(
-			array(
-				"name" => __("Posts Grid", "vc_extender"),
-				"description" => __("Display your posts in grid view", "vc_extender"),
-				"category" => VC_EXTENDER_CATEGORY,
-				"base" => "df_posts_grid",
-				"content_element" => true,
-				"is_container" => true,
-				"params" => array(
-						array(
-							"type" => "dropdown",
-							"heading" => "Style", 
-							"param_name" => "style",
-							"admin_label" => "style",
-							"value" => array(
-								"style 1" => "style 1",
-								"style 2" => "style 2",
-								"style 3" => "style 3"
+	/**
+	 * df_set_params_block()
+	 * @param $block_type
+	 * function for set params of "params" vc_map()
+	 */
+	function df_set_params_block($block_type){
+		if($block_type == 'post_block'){
+			$this->params_block = array(
+							array(
+								"type" => "textfield",
+								"heading" => "Custom Title", 
+								"param_name" => "title",
+								"admin_label" => true,
+								"description" => "- Optional, a title for this block -",
+								"group" => VC_EXTENDER_GROUP_GENERAL
 							),
-							"description" => "Changes the layouts style of the grid"
-						),array(
-							"type" => "dropdown",
-							"heading" => "Post Source",
-							"param_name" => "source",
-							"value" => array(
-								"Most Recent" => "most-recent",
-								"By Category" => "by-category",
-								"By Post ID" => "by-id",
-								"By Tag" => "by-tag",
-								"By Author" => "by-author"
+							array(
+								"type" => "textfield",
+								"heading" => "Title Url",
+								"param_name" => "title_url",
+								"admin_label" => true,
+								"description" => "- Optional, a custom url when block title is clicked -",
+								"group" => VC_EXTENDER_GROUP_GENERAL
 							),
-							"std" => "most-recent",
-							"admin_label" => true,
-							"description" => "Select the source of the posts"
-						)
+							array(
+								"type" => "colorpicker",
+								"heading" => "Title Text Color",
+								"param_name" => "title_text_color",
+								"admin_label" => true,
+								"description" => "- Optional, choose custom text color for block title -",
+								"group" => VC_EXTENDER_GROUP_GENERAL
+							),
+							array(
+								"type" => "colorpicker",
+								"heading" => "Title Background Color",
+								"param_name" => "title_bg_color",
+								"admin_label" => true,
+								"description" => "- Optional, choose custom background color for block title -",
+								"group" => VC_EXTENDER_GROUP_GENERAL
+							),
+							array(
+								"type" => "textfield",
+								"heading" => "Limit Post Number",
+								"param_name" => "limit_post_number",
+								"admin_label" => true,
+								"value" => 5, // default value
+								"description" => "- If empty, number of posts will be the number from Wordpress Settings -> Reading -",
+								"group" => VC_EXTENDER_GROUP_GENERAL
+							),
+							array(
+								"type" => "dropdown",
+								"heading" => "Post Source",
+								"param_name" => "source",
+								"value" => array(
+									"Most Recent" => "most-recent",
+									"By Category" => "by-category",
+									"By Post ID" => "by-post-id",
+									"By Tag" => "by-tag",
+									"By Author" => "by-author"
+								),
+								"std" => "most-recent",
+								"admin_label" => true,
+								"description" => "Select the source of the posts",
+								"group" => VC_EXTENDER_GROUP_FILTER
+							),
+							array(
+								"type" => "checkbox",
+								"heading" => "Posts Categories",
+								"param_name" => "post_categories",
+								"value" => "temp categories",
+								"description" => "Which categories would you like to show?",
+								"dependency" => array("element" => "source", "value" => array('by-category')),
+								"group" => VC_EXTENDER_GROUP_FILTER
+							),
+							array(
+								"type" => "textfield",
+								"heading" => "Post IDs",
+								"param_name" => "post_ids",
+								"description" => "Enter the post IDs you would like to display (separated by comma)",
+								"dependency" => array("element" => "source", "value" => array('by-post-id')),
+								"group" => VC_EXTENDER_GROUP_FILTER
+							),
+							array(
+								"type" => "textfield",
+								"heading" => "Tag Slugs",
+								"param_name" => "tag_slugs",
+								"description" => "Enter the tag slugs you would like to display (separated by comma)", 
+								"dependency" => array("element" => "source", "value" => array('by-tag')),
+								"group" => VC_EXTENDER_GROUP_FILTER
+							),
+							array(
+								"type" => "textfield",
+								"heading" => "Author IDs",
+								"param_name" => "author_ids",
+								"description" => "Enter the Author IDs you would like to display (separated by comma)",
+								"dependency" => array("element" => "source", "value" => array('by-author')),
+								"group" => VC_EXTENDER_GROUP_FILTER
+							)
+					);
+			
+		}
+		return $this->params_block;
+	}
+		
+	/**
+	 * df_mapping_block()
+	 * function for create block using vc_map()
+	 */
+	function df_mapping_block(){
+		// loop $params_map, call vc_map() 
+		foreach ($this->params_map as $aom) {
+			extract($aom);
+			$this->df_vc_map_block($name, $description, $base, $params);
+		}
+	}
+
+	/**
+	 * df_vc_map_block()
+	 * @param $name_block
+	 * @param $desc_block
+	 * @param $base_block
+	 * @param $params
+	 * function call for vc_map()
+	 */
+	function df_vc_map_block($name_block, $desc_block, $base_block, $params){
+		vc_map(
+				array(
+					"name" => __($name_block, "df_vc_extender"),
+					"description" => __($desc_block, "df_vc_extender"),
+					"category" => VC_EXTENDER_CATEGORY,
+					"base" => $base_block,
+					"content_element" => true,
+					"params" => $params
+					
 				)
-			)
 		);
 	}
 
-	
 }
+
 // shortcode vc_extender
 require_once('df_vc_extender-shortcode.php');
 new vc_extender_shortcode();
