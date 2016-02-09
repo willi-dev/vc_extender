@@ -7,12 +7,16 @@
  */
 class vc_extender_shortcode {
 
+	private $array_map_shortcode = array();
+
 	function __construct() {
+		if(!function_exists('vc_map_get_attributes')){
+			return;
+		}else{
+			add_shortcode( 'df_block_1', array($this, 'render_df_block_1') );
 
-		add_shortcode( 'df_block_1', array($this, 'render_df_block_1') );
-
-		add_shortcode('df_block_img', array($this, 'render_df_block_img') );
-
+			add_shortcode('df_block_img', array($this, 'render_df_block_img') );
+		}
 	}
 
 	public function render_df_block_1( $atts, $content = null ){
@@ -28,10 +32,11 @@ class vc_extender_shortcode {
 	}
 
 	public function render_df_block_img( $atts, $content = null ) {
-		if(!function_exists('vc_map_get_attributes')){
-			return;
-		}
-		
+		// pindahkan ke __construct() ?
+		// if(!function_exists('vc_map_get_attributes')){
+		// 	return;
+		// } 
+
 		$atts = vc_map_get_attributes( 'df_block_img', $atts );
 		extract( $atts );
 			$img_id = preg_replace('/[^\d]/', '', $image);
