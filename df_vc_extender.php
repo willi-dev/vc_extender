@@ -6,6 +6,8 @@
  * Description: extender for visual composer wordpress plugin
  */
 
+require_once('df_vc_extender-shortcode.php');
+
 define("VC_EXTENDER_CATEGORY", "by Dahz Themes");
 define("VC_EXTENDER_GROUP_GENERAL", "General");
 define("VC_EXTENDER_GROUP_FILTER", "Filter");
@@ -14,13 +16,18 @@ class df_vc_extender {
 
 	private $params_map = array();
 	private $params_block = array();
+	private $extender_shortcode;
 
 	/**
 	 * __construct()
 	 */
 	function __construct() {
+		// set param of vc_map()
 		$this->df_set_params_map();
+		
 		add_action( 'init', array( $this, 'df_mapping_block') );
+
+		$extender_shortcode = new df_vc_extender_shortcode( $this->params_map );
 	}
 
 	/**
@@ -54,6 +61,7 @@ class df_vc_extender {
 									"params" => $this->df_set_params_block("post_block")
 								)
 				); // end of array
+
 	}
 
 	/**
@@ -219,9 +227,4 @@ class df_vc_extender {
 	}
 
 }
-
-// shortcode df_vc_extender
-require_once('df_vc_extender-shortcode.php');
-new df_vc_extender_shortcode();
-
 /* file location: [theme directory]/core/vc_extender/df_vc_extender.php */
