@@ -26,8 +26,18 @@ class df_vc_extender {
 		$this->df_set_params_map();
 		
 		add_action( 'init', array( $this, 'df_mapping_block') );
+		add_action( 'vc_after_init', array( $this, 'df_disable_frontend_link') );
 
 		$extender_shortcode = new df_vc_extender_shortcode( $this->params_map );
+	}
+
+	/**
+	 * df_disable_frontend_link
+	 * @param - 
+	 * @return -
+	 */
+	function df_disable_frontend_link(){
+		vc_disable_frontend();
 	}
 
 	/**
@@ -59,6 +69,12 @@ class df_vc_extender {
 									"description" => "description for posts block 4",
 									"base" => "df_posts_block_4",
 									"params" => $this->df_set_params_block("post_block")
+								),
+				"df block author box" => array(
+									"name" => "Authors Box",
+									"description" => "Display Authors",
+									"base" => "df_authors_box",
+									"params" => $this->df_set_params_block("authors_box")
 								)
 				); // end of array
 
@@ -70,7 +86,7 @@ class df_vc_extender {
 	 * function for set params of "params" vc_map()
 	 */
 	function df_set_params_block($block_type){
-		if($block_type == 'post_block'){
+		if( $block_type == 'post_block' ){
 			$this->params_block = array(
 							array(
 								"type" => "textfield",
@@ -176,7 +192,64 @@ class df_vc_extender {
 								"group" => VC_EXTENDER_GROUP_FILTER
 							)
 					);
+		}else if( $block_type == 'authors_box' ){
+			$this->params_block = array(
+							array(
+								"type" => "textfield",
+								"heading" => "Custom Title", 
+								"param_name" => "title",
+								"admin_label" => true,
+								"description" => "Optional, a title for this block"
+							),
+							array(
+								"type" => "textfield",
+								"heading" => "Title Url",
+								"param_name" => "title_url",
+								"admin_label" => true,
+								"description" => "Optional, a custom url when block title is clicked"
+							),
+							array(
+								"type" => "dropdown",
+								"heading" => "Sort by",
+								"param_name" => "sort",
+								"value" => array(
+									"Sort by Name" => "by-name",
+									"Sort by Post Count" => "by-post-count"
+								),
+								"std" => "by-name",
+								"admin_label" => true,
+								"description" => "Sorting Author"
+							),
+							array(
+								"type" => "textfield",
+								"heading" => "Exclude Authors",
+								"param_name" => "exclude_author_ids",
+								"description" => "Enter the Author IDs you would like to exclude (separated by comma)"
+							),
+							array(
+								"type" => "textfield",
+								"heading" => "Include Authors",
+								"param_name" => "include_author_ids",
+								"description" => "Enter the Author IDs you would like to include (separated by comma) (do not use with exclude)"
+							),
+							array(
+								"type" => "colorpicker",
+								"heading" => "Title Text Color",
+								"param_name" => "title_text_color",
+								"admin_label" => true,
+								"description" => "Optional, choose custom text color for block title"
+							),
+							array(
+								"type" => "colorpicker",
+								"heading" => "Title Background Color",
+								"param_name" => "title_bg_color",
+								"admin_label" => true,
+								"description" => "Optional, choose custom background color for block title"
+							),
+
+					);
 		}
+
 		return $this->params_block;
 	}
 		
