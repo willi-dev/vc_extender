@@ -26,6 +26,7 @@ class df_vc_extender {
 		$this->df_set_params_map();
 		
 		add_action( 'init', array( $this, 'df_mapping_block') );
+		
 		add_action( 'vc_after_init', array( $this, 'df_disable_frontend_link') );
 
 		$extender_shortcode = new df_vc_extender_shortcode( $this->params_map );
