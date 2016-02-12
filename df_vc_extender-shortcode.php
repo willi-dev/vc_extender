@@ -144,7 +144,6 @@ class df_vc_extender_shortcode {
 		wp_reset_postdata();
 
 		return $out;
-
 	}
 
 	/**
@@ -267,7 +266,6 @@ class df_vc_extender_shortcode {
 		wp_reset_postdata();
 
 		return $out;
-
 	}
 
 	/**
@@ -390,7 +388,6 @@ class df_vc_extender_shortcode {
 		wp_reset_postdata();
 
 		return $out;
-
 	}
 
 	/**
@@ -513,7 +510,75 @@ class df_vc_extender_shortcode {
 		wp_reset_postdata();
 
 		return $out;
+	}
 
+	/**
+	 * df_authors_box
+	 * render shortcode output to frontend for posts block 4
+	 */
+	function df_authors_box( $atts, $content = null ){
+		$atts = vc_map_get_attributes( 'df_authors_box', $atts );
+		extract( $atts );
+
+		// set default params
+		$args = array(
+				'order' => 'ASC',
+				'optioncount' => true,
+				'exclude_admin' => false,
+				'html' => true,
+				'style' => 'none'
+			);
+		if( $sort == 'by-name' ){
+			$args = wp_parse_args(
+				array(
+					'orderby' => 'name'
+				)
+			, $args);
+		}else{
+			$args = wp_parse_args(
+				array(
+					'orderby' => 'post_count'
+				)
+			, $args);
+		}
+		if( !empty($exclude_author_ids) ){
+			$ex = explode(',', $exclude_author_ids);
+
+			$args = wp_parse_args(
+				array(
+					'exclude' => $ex
+				)
+			, $args);
+		}else if( !empty($include_author_ids) ){
+			$in = explode(',', $include_author_ids);
+
+			$args = wp_parse_args(
+				array(
+					'include' => $in
+				)
+			, $args);
+		}
+		ob_start();
+		
+		$title_text_color = ( isset($title_text_color) ) ? $title_text_color : '';
+
+		?>
+		
+		<div class="df-vc-title-block" style="color:<?php echo $title_text_color;?> ;">
+			<?php echo $title;?>
+		</div>
+		<?php
+			$authors = wp_list_authors( $args );
+			print_r($authors);
+			
+
+		$out = ob_get_contents();
+
+		if (ob_get_contents()) ob_end_clean();
+		wp_reset_query();
+		wp_reset_postdata();
+
+		return $out;
 	}
 
 }
