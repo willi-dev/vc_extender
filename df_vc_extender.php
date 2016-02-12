@@ -81,6 +81,12 @@ class df_vc_extender {
 									"description" => "Embed Video from Youtube & Vimeo",
 									"base" => "df_video_embed",
 									"params" => $this->df_set_params_block("video_embed")
+								),
+				"df audio embed" => array(
+									"name" => "Audio",
+									"description" => "Embed Audio (ex: from soundcloud.com)",
+									"base" => "df_audio_embed",
+									"params" => $this->df_set_params_block("audio_embed")
 								)
 				); // end of array
 
@@ -144,6 +150,7 @@ class df_vc_extender {
 							array(
 								"type" => "textfield",
 								"heading" => "Custom Title", 
+								"value" => "Block Title",
 								"param_name" => "title",
 								"admin_label" => true,
 								"description" => "Optional, a title for this block",
@@ -250,6 +257,7 @@ class df_vc_extender {
 							array(
 								"type" => "textfield",
 								"heading" => "Custom Title", 
+								"value" => "Block Title",
 								"param_name" => "title",
 								"admin_label" => true,
 								"description" => "Optional, a title for this block"
@@ -301,12 +309,13 @@ class df_vc_extender {
 							),
 
 					);
-		}else if($block_type == "video_embed"){
+		}else if( $block_type == "video_embed" ){
 			$this->params_block = array(
 							array(
 								"type" => "textfield",
 								"heading" => "Custom Title", 
 								"param_name" => "title",
+								"value" => "Block Title",
 								"admin_label" => true,
 								"description" => "Optional, a title for this block"
 							),
@@ -349,8 +358,40 @@ class df_vc_extender {
 								"param_name" => "title_bg_color",
 								"admin_label" => true,
 								"description" => "Optional, choose custom background color for block title"
-							),
+							)
 
+					);
+		}else if( $block_type == "audio_embed" ){
+			$this->params_block = array(
+							array(
+								"type" => "textfield",
+								"heading" => "Custom Title", 
+								"param_name" => "title",
+								"value" => "Block Title",
+								"admin_label" => true,
+								"description" => "Optional, a title for this block"
+							),
+							array(
+								"type" => "textfield",
+								"heading" => "Audio URL",
+								"admin_label" => true,
+								"param_name" => "audio_url",
+								"description" => "Enter URL Audio (ex: https://soundcloud.com/alice_noise/deltaapokalips)"
+							),
+							array(
+								"type" => "colorpicker",
+								"heading" => "Title Text Color",
+								"param_name" => "title_text_color",
+								"admin_label" => true,
+								"description" => "Optional, choose custom text color for block title"
+							),
+							array(
+								"type" => "colorpicker",
+								"heading" => "Title Background Color",
+								"param_name" => "title_bg_color",
+								"admin_label" => true,
+								"description" => "Optional, choose custom background color for block title"
+							)
 					);
 		}
 		return $this->params_block;
