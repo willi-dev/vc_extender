@@ -70,15 +70,68 @@ class df_vc_extender {
 									"base" => "df_posts_block_4",
 									"params" => $this->df_set_params_block("post_block")
 								),
-				"df block author box" => array(
+				"df author box" => array(
 									"name" => "Authors Box",
 									"description" => "Display Authors",
 									"base" => "df_authors_box",
 									"params" => $this->df_set_params_block("authors_box")
+								),
+				"df video embed" => array(
+									"name" => "Video",
+									"description" => "Embed Video from Youtube & Vimeo",
+									"base" => "df_video_embed",
+									"params" => $this->df_set_params_block("video_embed")
 								)
 				); // end of array
 
 	}
+
+	/**
+	 * df_mapping_block()
+	 * function for create block using vc_map()
+	 */
+	function df_mapping_block(){
+		// loop $params_map, call vc_map() 
+		foreach ($this->params_map as $aom) {
+			extract($aom);
+			$this->df_vc_map_block($name, $description, $base, $params);
+		}
+	}
+
+	/**
+	 * df_vc_map_block()
+	 * @param $name_block
+	 * @param $desc_block
+	 * @param $base_block
+	 * @param $params
+	 * function call for vc_map()
+	 */
+	function df_vc_map_block($name_block, $desc_block, $base_block, $params){
+		vc_map(
+			array(
+				"name" => __($name_block, "df_vc_extender"),
+				"description" => __($desc_block, "df_vc_extender"),
+				"category" => VC_EXTENDER_CATEGORY,
+				"base" => $base_block,
+				"content_element" => true,
+				"params" => $params
+			)
+		);
+	}
+
+	/**
+	 * df_render_categories()
+	 * @return list checkboxes of categories
+	 */
+	function df_render_categories(){
+		$blog_categories = get_categories();
+		$out = array();
+		foreach($blog_categories as $category) {
+			$out[$category->name] = $category->cat_ID;
+		}
+		return $out;
+	}
+
 
 	/**
 	 * df_set_params_block()
@@ -248,55 +301,59 @@ class df_vc_extender {
 							),
 
 					);
-		}
+		}else if($block_type == "video_embed"){
+			$this->params_block = array(
+							array(
+								"type" => "textfield",
+								"heading" => "Custom Title", 
+								"param_name" => "title",
+								"admin_label" => true,
+								"description" => "Optional, a title for this block"
+							),
+							array(
+								"type" => "dropdown",
+								"heading" => "Source",
+								"param_name" => "source",
+								"value" => array(
+									"Youtube" => "youtube",
+									"Vimeo" => "vimeo"
+								),
+								"std" => "youtube",
+								"admin_label" => true,
+								"description" => "Video source"
+							),
+							array(
+								"type" => "textfield",
+								"heading" => "Youtube URL",
+								"param_name" => "youtube_url",
+								"description" => "Enter Youtube URL Video (ex: https://www.youtube.com/watch?v=94venkIkodU)",
+								"dependency" => array("element" => "source", "value" => array('youtube')),
+							),
+							array(
+								"type" => "textfield",
+								"heading" => "Vimeo URL",
+								"param_name" => "vimeo_url",
+								"description" => "Enter Vimeo URL Video (ex: https://vimeo.com/38416914)",
+								"dependency" => array("element" => "source", "value" => array('vimeo')),
+							),
+							array(
+								"type" => "colorpicker",
+								"heading" => "Title Text Color",
+								"param_name" => "title_text_color",
+								"admin_label" => true,
+								"description" => "Optional, choose custom text color for block title"
+							),
+							array(
+								"type" => "colorpicker",
+								"heading" => "Title Background Color",
+								"param_name" => "title_bg_color",
+								"admin_label" => true,
+								"description" => "Optional, choose custom background color for block title"
+							),
 
+					);
+		}
 		return $this->params_block;
-	}
-		
-	/**
-	 * df_mapping_block()
-	 * function for create block using vc_map()
-	 */
-	function df_mapping_block(){
-		// loop $params_map, call vc_map() 
-		foreach ($this->params_map as $aom) {
-			extract($aom);
-			$this->df_vc_map_block($name, $description, $base, $params);
-		}
-	}
-
-	/**
-	 * df_vc_map_block()
-	 * @param $name_block
-	 * @param $desc_block
-	 * @param $base_block
-	 * @param $params
-	 * function call for vc_map()
-	 */
-	function df_vc_map_block($name_block, $desc_block, $base_block, $params){
-		vc_map(
-			array(
-				"name" => __($name_block, "df_vc_extender"),
-				"description" => __($desc_block, "df_vc_extender"),
-				"category" => VC_EXTENDER_CATEGORY,
-				"base" => $base_block,
-				"content_element" => true,
-				"params" => $params
-			)
-		);
-	}
-
-	/**
-	 * df_render_categories()
-	 * @return list checkboxes of categories
-	 */
-	function df_render_categories(){
-		$blog_categories = get_categories();
-		$out = array();
-		foreach($blog_categories as $category) {
-			$out[$category->name] = $category->cat_ID;
-		}
-		return $out;
 	}
 
 }
