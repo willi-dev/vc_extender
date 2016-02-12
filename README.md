@@ -8,6 +8,6 @@ how to setup:
 
 ```
  require get_template_directory() . '/inc/vc_extender/df_vc_extender.php';
- new vc_extender();
+ new df_vc_extender();
 ```
 version: 0
