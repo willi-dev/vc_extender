@@ -321,6 +321,38 @@ class df_vc_extender_shortcode {
 	}
 
 	/**
+	 * df_audio_embed
+	 * render shortcode output to frontend for audio embed content
+	 */
+	function df_audio_embed( $atts, $content = null ){
+		$atts = vc_map_get_attributes( 'df_audio_embed', $atts );
+		extract( $atts );
+
+		$url = $audio_url;
+
+		$output_embed = wp_oembed_get($url);
+
+		ob_start();
+		$title_text_color = ( isset($title_text_color) ) ? $title_text_color : '';
+
+		?>
+		
+		<div class="df-vc-title-block" style="color:<?php echo $title_text_color;?> ;">
+			<?php echo $title;?>
+		</div>
+
+		<div class="">
+			<?php echo $output_embed; ?>
+		</div>
+		<?php
+
+		$out = ob_get_contents();
+
+		if( ob_get_contents() ) ob_get_clean();
+
+		return $out;
+	}
+	/**
 	 * df_vc_atts_to_args
 	 * @param $atts
 	 * @return $args
