@@ -31,19 +31,21 @@ class df_vc_extender_shortcode {
 	function df_posts_block_1( $atts, $content = null ){
 		$atts = vc_map_get_attributes( 'df_posts_block_1', $atts );
 		extract($atts);
-		$args = $this->df_vc_post_atts_to_args( $atts );
-		$posts = query_posts( $args );
+		$args = $this->df_vc_atts_to_args( $atts, $sort_order );
+		$posts = new WP_Query( $args );
 
 		ob_start();
 		
-		$title_text_color = ( isset($title_text_color) ) ? $title_text_color : ''; ?>
+		$title_text_color = ( isset($title_text_color) ) ? $title_text_color : ''; 
+		( $title == 'Block Title' ) ? $title = '' : $title ;
+		?>
 		<div class="df-vc-title-block" style="color:<?php echo $title_text_color;?> ;">
 			<?php echo $title;?>
 		</div>
 		<?php
-		if( have_posts() ) { ?>
+		if( $posts->have_posts() ) { ?>
 		<div class="row posts">
-		<?php while( have_posts() ) : the_post(); ?>
+		<?php while( $posts->have_posts() ) : $posts->the_post(); ?>
 				<div class="col-md-3">
 					<?php if (has_post_thumbnail() ) { ?>
 						<figure class="df-post-thumbnail">
@@ -78,19 +80,22 @@ class df_vc_extender_shortcode {
 	function df_posts_block_2( $atts, $content = null ){
 		$atts = vc_map_get_attributes( 'df_posts_block_2', $atts );
 		extract($atts);
-		$args = $this->df_vc_post_atts_to_args( $atts );
-		$posts = query_posts( $args );
+		$args = $this->df_vc_atts_to_args( $atts, $sort_order );
+		// $posts = query_posts( $args );
+		$posts = new WP_Query( $args );
 
 		ob_start();
 		
-		$title_text_color = ( isset($title_text_color) ) ? $title_text_color : ''; ?>
+		$title_text_color = ( isset($title_text_color) ) ? $title_text_color : ''; 
+		( $title == 'Block Title' ) ? $title = '' : $title ;
+		?>
 		<div class="df-vc-title-block" style="color:<?php echo $title_text_color;?> ;">
 			<?php echo $title;?>
 		</div>
 		<?php
-		if( have_posts() ) { ?>
+		if( $posts->have_posts() ) { ?>
 		<div class="row posts">
-		<?php while( have_posts() ) : the_post(); ?>
+		<?php while( $posts->have_posts() ) : $posts->the_post(); ?>
 				<div class="col-md-3">
 					<?php if (has_post_thumbnail() ) { ?>
 						<figure class="df-post-thumbnail">
@@ -125,19 +130,22 @@ class df_vc_extender_shortcode {
 	function df_posts_block_3( $atts, $content = null ){
 		$atts = vc_map_get_attributes( 'df_posts_block_3', $atts );
 		extract($atts);
-		$args = $this->df_vc_post_atts_to_args( $atts );
-		$posts = query_posts( $args );
+		$args = $this->df_vc_atts_to_args( $atts, $sort_order );
+		// $posts = query_posts( $args );
+		$posts = new WP_Query( $args );
 
 		ob_start();
 		
-		$title_text_color = ( isset($title_text_color) ) ? $title_text_color : ''; ?>
+		$title_text_color = ( isset($title_text_color) ) ? $title_text_color : ''; 
+		( $title == 'Block Title' ) ? $title = '' : $title ;
+		?>
 		<div class="df-vc-title-block" style="color:<?php echo $title_text_color;?> ;">
 			<?php echo $title;?>
 		</div>
 		<?php
-		if( have_posts() ) { ?>
+		if( $posts->have_posts() ) { ?>
 		<div class="row posts">
-		<?php while( have_posts() ) : the_post(); ?>
+		<?php while( $posts->have_posts() ) : $posts->the_post(); ?>
 				<div class="col-md-3">
 					<?php if (has_post_thumbnail() ) { ?>
 						<figure class="df-post-thumbnail">
@@ -172,19 +180,22 @@ class df_vc_extender_shortcode {
 	function df_posts_block_4( $atts, $content = null ){
 		$atts = vc_map_get_attributes( 'df_posts_block_4', $atts );
 		extract($atts);
-		$args = $this->df_vc_post_atts_to_args( $atts );
-		$posts = query_posts( $args );
+		$args = $this->df_vc_atts_to_args( $atts, $sort_order );
+		// $posts = query_posts( $args );
+		$posts = new WP_Query( $args );
 
 		ob_start();
 		
-		$title_text_color = ( isset($title_text_color) ) ? $title_text_color : ''; ?>
+		$title_text_color = ( isset($title_text_color) ) ? $title_text_color : ''; 
+		( $title == 'Block Title' ) ? $title = '' : $title ;
+		?>
 		<div class="df-vc-title-block" style="color:<?php echo $title_text_color;?> ;">
 			<?php echo $title;?>
 		</div>
 		<?php
-		if( have_posts() ) { ?>
+		if( $posts->have_posts() ) { ?>
 		<div class="row posts">
-		<?php while( have_posts() ) : the_post(); ?>
+		<?php while( $posts->have_posts() ) : $posts->the_post(); ?>
 				<div class="col-md-3">
 					<?php if (has_post_thumbnail() ) { ?>
 						<figure class="df-post-thumbnail">
@@ -283,41 +294,103 @@ class df_vc_extender_shortcode {
 	 * df_video_embed
 	 * render shortcode output to frontend for video content
 	 */
-	function df_video_embed( $atts, $content = null ){
-		$atts = vc_map_get_attributes( 'df_video_embed', $atts );
+	function df_video_post( $atts, $content = null ){
+		$atts = vc_map_get_attributes( 'df_video_post', $atts );
 		extract( $atts );
-		$url = '';
-		if( $source == 'youtube' ){
-			if( !empty($youtube_url) ) {
-				$url = $youtube_url;
-			}
-		}else{
-			if( !empty($vimeo_url) ){
-				$url = $vimeo_url;
-			}
-		}
+		$post_format = 'post-format-video';
 
-		$output_embed = wp_oembed_get($url);
+		$args = $this->df_vc_atts_to_args( $atts, $sort_order );
+
+		// tax_query params for get only video post format 
+		$args = wp_parse_args(
+			array(
+				'tax_query' => array(
+						array(
+							'taxonomy' => 'post_format',
+							'field' => 'slug',
+							'terms' => array( $post_format )
+						)
+					)
+			)
+		, $args);
+
+		// $posts = query_posts( $args );
+		$posts = new WP_Query( $args );
+		$vid = '';
 
 		ob_start();
-		$title_text_color = ( isset($title_text_color) ) ? $title_text_color : '';
 
+		$title_text_color = ( isset($title_text_color) ) ? $title_text_color : '';
+		( $title == 'Block Title' ) ? $title = '' : $title ;
 		?>
-		
+
 		<div class="df-vc-title-block" style="color:<?php echo $title_text_color;?> ;">
 			<?php echo $title;?>
 		</div>
 
-		<div class="">
-			<?php echo $output_embed; ?>
-		</div>
 		<?php
+		if( $posts->have_posts() ) { ?>
+		<div class="row posts">
 
+		<?php while( $posts->have_posts() ) : $posts->the_post();
+
+			$content = apply_filters( 'the_content', get_the_content() ) ;
+			// print_r($content);
+
+    		$embeds = get_media_embedded_in_content( $content ); // contain iframe output video
+    		// print_r($embeds);
+
+    		// extract first url
+    		// $reg = preg_match('|^\s*(https?://[^\s"]+)\s*$|im', get_the_content(), $matches);
+    		// $vid_url = $matches[0];
+    		// end here
+		?>
+				<div class="col-md-3">
+				 	<?php //echo $vid_url;?>
+
+				 	<?php // echo $embeds[0];?>
+					
+					<div class="embed-responsive embed-responsive-4by3">
+				 	<?php echo $embeds[0];?>
+				 	</div>
+					<?php if (has_post_thumbnail() ) { ?>
+						<figure class="df-post-thumbnail">
+							<a href="<?php the_permalink();?>" title="<?php the_title();?>" rel="bookmark">
+								<?php the_post_thumbnail('post-thumbnail', array('itemprop' => 'image', 'class' => 'img-responsive')); ?>
+							</a>
+						</figure>
+					<?php } ?>	
+						<header class="post-title entry-header">
+							<?php the_title('<h5 class="entry-title" itemprop="name headline"><a href="'.get_permalink().'" title="'.the_title_attribute("echo=0").'">', '</a></h5>'); ?>
+						</header>
+						<!-- <div class="post-content entry-content small">
+							<?php //echo the_content(); ?>
+						</div> -->
+				</div>
+				
+				
+			<?php endwhile;?>
+		</div>	
+		<?php
+		}
 		$out = ob_get_contents();
 
 		if( ob_get_contents() ) ob_get_clean();
 
 		return $out;
+
+		// $url = '';
+		// if( $source == 'youtube' ){
+		// 	if( !empty($youtube_url) ) {
+		// 		$url = $youtube_url;
+		// 	}
+		// }else{
+		// 	if( !empty($vimeo_url) ){
+		// 		$url = $vimeo_url;
+		// 	}
+		// }
+
+		// $output_embed = wp_oembed_get($url);
 	}
 
 	/**
@@ -334,7 +407,7 @@ class df_vc_extender_shortcode {
 
 		ob_start();
 		$title_text_color = ( isset($title_text_color) ) ? $title_text_color : '';
-
+		( $title == 'Block Title' ) ? $title = '' : $title ;
 		?>
 		
 		<div class="df-vc-title-block" style="color:<?php echo $title_text_color;?> ;">
@@ -357,7 +430,7 @@ class df_vc_extender_shortcode {
 	 * @param $atts
 	 * @return $args
 	 */
-	function df_vc_post_atts_to_args( $atts ){
+	function df_vc_atts_to_args( $atts, $sort_order='' ){
 		extract( $atts );
 
 		$args = array(
@@ -419,8 +492,94 @@ class df_vc_extender_shortcode {
 				)
 			, $args);
 		}
+
+		// if sort order set
+		if( $sort_order != '' ){
+			if( $sort_order == 'sort-random-today' ){
+				$args = wp_parse_args( $this->df_date_query( $sort_order ), $args );
+
+			}else if( $sort_order == 'sort-random-7day' ){
+				$args = wp_parse_args( $this->df_date_query( $sort_order ), $args );
+
+			}else if( $sort_order == 'sort-alphabetical' ){
+				$args = wp_parse_args( $this->df_alphabetical_query( $sort_order ) , $args);
+
+			}else if( $sort_order == 'sort-popular' ){
+				$args = wp_parse_args( $this->df_popular_query( $sort_order ) , $args );
+			}
+		}
 		return $args;
 	}
 
+	/**
+	 * df_date_query
+	 * @param $args
+	 * @param $sort_type
+	 * @return $args
+	 */
+	function df_date_query( $sort_type ){
+		if( $sort_type == 'sort-random-today'){
+
+			$today = getdate();
+
+			$args = array(
+					'orderby' => 'rand',
+					'date_query' => array(
+							array(
+								'year' => $today['year'],
+								'month' => $today['mon'],
+								'day' => $today['mday']
+							)
+						)
+				);
+		}else if( $sort_type == 'sort-random-7day' ){
+			$week = date( 'W' );
+			$year = date( 'Y' );
+
+			$args = array(
+					'orderby' => 'rand',
+					'date_query' => array(
+							array(
+								'year' => $year,
+								'week' => $week
+							)
+						)
+				);
+		}
+
+		return $args;
+	}
+
+	/**
+	 * df_alphabetical_query
+	 * @param $args
+	 * @param $sort_type
+	 * @return $args
+	 */
+	function df_alphabetical_query( $sort_type ){
+		if( $sort_type == 'sort-alphabetical' ){
+			$args = array(
+					'order' => 'ASC',
+					'orderby' => 'title'
+				);
+		}
+		return $args;
+	}
+
+	/**
+	 * df_popular_query
+	 * @param $args
+	 * @param $sort_type
+	 * @return $args
+	 */
+	function df_popular_query( $args, $sort_type ){
+		if(  $sort_type == 'sort-popular' ){
+			$args = array(
+					'order' => 'DESC',
+					'orderby' => 'comment_count'
+				);
+		}
+		return $args;
+	}
 }
 /* file location: [theme directory]/core/vc_extender/df_vc_extender-shortcode.php */
