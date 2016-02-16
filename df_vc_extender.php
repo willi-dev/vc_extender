@@ -30,6 +30,7 @@ class df_vc_extender {
 		add_action( 'vc_after_init', array( $this, 'df_disable_frontend_link') );
 
 		$extender_shortcode = new df_vc_extender_shortcode( $this->params_map );
+
 	}
 
 	/**
@@ -77,18 +78,19 @@ class df_vc_extender {
 									"base" => "df_authors_box",
 									"params" => $this->df_set_params_block("authors_box")
 								),
-				"df video embed" => array(
-									"name" => "Video",
-									"description" => "Embed Video from Youtube & Vimeo",
-									"base" => "df_video_embed",
-									"params" => $this->df_set_params_block("video_embed")
-								),
 				"df audio embed" => array(
 									"name" => "Audio",
 									"description" => "Embed Audio (ex: from soundcloud.com)",
 									"base" => "df_audio_embed",
 									"params" => $this->df_set_params_block("audio_embed")
+								),
+				"df video post" => array(
+									"name" => "Video Post Format",
+									"description" => "Video from video post format",
+									"base" => "df_video_post",
+									"params" => $this->df_set_params_block("video_post")
 								)
+				
 				); // end of array
 
 	}
@@ -127,7 +129,7 @@ class df_vc_extender {
 	}
 
 	/**
-	 * df_render_categories()
+	 * df_render_categories()	
 	 * @return list checkboxes of categories
 	 */
 	function df_render_categories(){
@@ -146,7 +148,7 @@ class df_vc_extender {
 	 * function for set params of "params" vc_map()
 	 */
 	function df_set_params_block($block_type){
-		if( $block_type == 'post_block' ){
+		if( ($block_type == 'post_block') || ($block_type == 'video_post') ){
 			$this->params_block = array(
 							array(
 								"type" => "textfield",
@@ -251,6 +253,22 @@ class df_vc_extender {
 								"description" => "Enter the Author IDs you would like to display (separated by comma)",
 								"dependency" => array("element" => "source", "value" => array('by-author')),
 								"group" => VC_EXTENDER_GROUP_FILTER
+							),
+							array(
+								"type" => "dropdown",
+								"heading" => "Sort Order",
+								"param_name" => "sort_order",
+								"value" => array(
+										"Latest" => "sort-latest",
+										"Random Posts Today" => "sort-random-today",
+										"Random Posts from Last 7 day" => "sort-random-7day",
+										"Alphabetical" => "sort-alphabetical",
+										"Popular" => "sort-popular"
+									),
+								"std" => "sort-latest",
+								"admin_label" => true,
+								"description" => "Select Sort Order",
+								"group" => VC_EXTENDER_GROUP_FILTER
 							)
 					);
 		}else if( $block_type == 'authors_box' ){
@@ -310,7 +328,7 @@ class df_vc_extender {
 							),
 
 					);
-		}else if( $block_type == "video_embed" ){
+		}/*else if( $block_type == "video_post" ){
 			$this->params_block = array(
 							array(
 								"type" => "textfield",
@@ -362,7 +380,7 @@ class df_vc_extender {
 							)
 
 					);
-		}else if( $block_type == "audio_embed" ){
+		}*/else if( $block_type == "audio_embed" ){
 			$this->params_block = array(
 							array(
 								"type" => "textfield",
