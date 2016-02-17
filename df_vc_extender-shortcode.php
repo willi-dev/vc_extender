@@ -572,7 +572,7 @@ class df_vc_extender_shortcode {
 	 * @param $sort_type
 	 * @return $args
 	 */
-	function df_popular_query( $args, $sort_type ){
+	function df_popular_query( $sort_type ){
 		if(  $sort_type == 'sort-popular' ){
 			$args = array(
 					'order' => 'DESC',
@@ -582,4 +582,4 @@ class df_vc_extender_shortcode {
 		return $args;
 	}
 }
-/* file location: [theme directory]/core/vc_extender/df_vc_extender-shortcode.php */
+/* file location: [theme directory]/inc/vc_extender/df_vc_extender-shortcode.php */

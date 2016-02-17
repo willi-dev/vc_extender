@@ -417,4 +417,4 @@ class df_vc_extender {
 	}
 
 }
-/* file location: [theme directory]/core/vc_extender/df_vc_extender.php */
+/* file location: [theme directory]/inc/vc_extender/df_vc_extender.php */
