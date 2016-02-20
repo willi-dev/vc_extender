@@ -6,19 +6,19 @@
  * Description: class for render vc extender shortcode
  */
 
-class df_vc_extender_shortcode {
+class DF_VC_Extender_Shortcode {
 
 	/**
 	 * __construct()
 	 */
 	function __construct( $array_map ) {
-		if(!function_exists('vc_map_get_attributes')){
+		if(!function_exists( 'vc_map_get_attributes' )){
 			return;
 		}else{
 			$array_map_block = $array_map;
 
 			foreach ( $array_map_block as $amb) {
-				extract($amb);
+				extract( $amb );
 				add_shortcode( $base, array( $this , $base ) );
 			}
 		}
@@ -582,4 +582,4 @@ class df_vc_extender_shortcode {
 		return $args;
 	}
 }
-/* file location: [theme directory]/inc/vc_extender/df_vc_extender-shortcode.php */
+/* file location: [theme directory]/inc/df-core/df-vc-extender/df-vc-extender-shortcode.php */

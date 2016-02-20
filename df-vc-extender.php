@@ -6,13 +6,13 @@
  * Description: extender for visual composer wordpress plugin
  */
 
-require_once('df_vc_extender-shortcode.php');
+require_once('df-vc-extender-shortcode.php');
 
 define("VC_EXTENDER_CATEGORY", "by Dahz Themes");
 define("VC_EXTENDER_GROUP_GENERAL", "General");
 define("VC_EXTENDER_GROUP_FILTER", "Filter");
 
-class df_vc_extender {
+class DF_VC_Extender {
 
 	private $params_map = array();
 	private $params_block = array();
@@ -25,11 +25,11 @@ class df_vc_extender {
 		// set param of vc_map()
 		$this->df_set_params_map();
 		
-		add_action( 'init', array( $this, 'df_mapping_block') );
+		add_action( 'init', array( $this, 'df_mapping_block' ) );
 		
 		add_action( 'vc_after_init', array( $this, 'df_disable_frontend_link') );
 
-		$extender_shortcode = new df_vc_extender_shortcode( $this->params_map );
+		$extender_shortcode = new DF_vc_extender_shortcode( $this->params_map );
 
 	}
 
@@ -52,43 +52,43 @@ class df_vc_extender {
 									"name" => "posts block 1",
 									"description" => "description for posts block 1",
 									"base" => "df_posts_block_1",
-									"params" => $this->df_set_params_block("post_block")
+									"params" => $this->df_set_params_block( "post_block" )
 								),
 				"df_block 2" => array(
 									"name" => "posts block 2",
 									"description" => "description for posts block 2",
 									"base" => "df_posts_block_2",
-									"params" => $this->df_set_params_block("post_block")
+									"params" => $this->df_set_params_block( "post_block" )
 								),
 				"df block 3" => array(
 									"name" => "posts block 3",
 									"description" => "description for posts block 3",
 									"base" => "df_posts_block_3",
-									"params" => $this->df_set_params_block("post_block")
+									"params" => $this->df_set_params_block( "post_block" )
 								),
 				"df block 4" => array(
 									"name" => "posts block 4",
 									"description" => "description for posts block 4",
 									"base" => "df_posts_block_4",
-									"params" => $this->df_set_params_block("post_block")
+									"params" => $this->df_set_params_block( "post_block" )
 								),
 				"df author box" => array(
 									"name" => "Authors Box",
 									"description" => "Display Authors",
 									"base" => "df_authors_box",
-									"params" => $this->df_set_params_block("authors_box")
+									"params" => $this->df_set_params_block( "authors_box" )
 								),
 				"df audio embed" => array(
 									"name" => "Audio",
 									"description" => "Embed Audio (ex: from soundcloud.com)",
 									"base" => "df_audio_embed",
-									"params" => $this->df_set_params_block("audio_embed")
+									"params" => $this->df_set_params_block( "audio_embed" )
 								),
 				"df video post" => array(
 									"name" => "Video Post Format",
 									"description" => "Video from video post format",
 									"base" => "df_video_post",
-									"params" => $this->df_set_params_block("video_post")
+									"params" => $this->df_set_params_block( "video_post" )
 								)
 				
 				); // end of array
@@ -101,9 +101,9 @@ class df_vc_extender {
 	 */
 	function df_mapping_block(){
 		// loop $params_map, call vc_map() 
-		foreach ($this->params_map as $aom) {
-			extract($aom);
-			$this->df_vc_map_block($name, $description, $base, $params);
+		foreach ( $this->params_map as $aom ) {
+			extract( $aom );
+			$this->df_vc_map_block( $name, $description, $base, $params );
 		}
 	}
 
@@ -118,8 +118,8 @@ class df_vc_extender {
 	function df_vc_map_block($name_block, $desc_block, $base_block, $params){
 		vc_map(
 			array(
-				"name" => __($name_block, "df_vc_extender"),
-				"description" => __($desc_block, "df_vc_extender"),
+				"name" => __( $name_block, "df_vc_extender" ),
+				"description" => __( $desc_block, "df_vc_extender" ),
 				"category" => VC_EXTENDER_CATEGORY,
 				"base" => $base_block,
 				"content_element" => true,
@@ -135,7 +135,7 @@ class df_vc_extender {
 	function df_render_categories(){
 		$blog_categories = get_categories();
 		$out = array();
-		foreach($blog_categories as $category) {
+		foreach( $blog_categories as $category ) {
 			$out[$category->name] = $category->cat_ID;
 		}
 		return $out;
@@ -148,7 +148,7 @@ class df_vc_extender {
 	 * function for set params of "params" vc_map()
 	 */
 	function df_set_params_block($block_type){
-		if( ($block_type == 'post_block') || ($block_type == 'video_post') ){
+		if( ( $block_type == 'post_block' ) || ( $block_type == 'video_post' ) ){
 			$this->params_block = array(
 							array(
 								"type" => "textfield",
@@ -418,6 +418,6 @@ class df_vc_extender {
 
 }
 
-new df_vc_extender();
+new DF_VC_Extender();
 
-/* file location: [theme directory]/inc/vc_extender/df_vc_extender.php */
+/* file location: [theme directory]/inc/df-core/df-vc-extender/df-vc-extender.php */
